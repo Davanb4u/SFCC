@@ -1,0 +1,30 @@
+name: Send email with attachment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  email_job:
+    runs-on: 'ubuntu-latest' 
+    environment:
+      name: ST1Environment     
+    steps:
+      - name: Create an attachment
+        run: |
+          cat << EOF > ./attachment.txt
+          Example attachment content.
+          EOF
+      - name: Send email
+        uses: telia-actions/mutt-email-action@v1
+        with:
+          recipients: narayana.velagala@teliacompany.com
+          from: noreply@teliacompany.com
+          subject: test
+          body: |
+            Hello, World!
+            
+            Br,
+            test
+          smtp_url: ${{ secrets.EMAIL_ACTION_SMTP_URL }}
+          realname: "Narayana Velagala"
+          attachment: ./attachment.txt
